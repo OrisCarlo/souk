@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Souk">
+<meta name="theme-color" content="#0E5E6F">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="manifest" href="manifest.json">
+<title>Souk du Pirate</title>
+<style>html,body{margin:0;height:100%;background:#EDF3F2;color:#0F2A30;font:600 18px/1.4 system-ui,sans-serif}#b{display:grid;place-items:center;height:100%;text-align:center}</style>
+</head>
+<body>
+<div id="b"><div>Souk du Pirate<br><small style="font-weight:400">Chargement…</small></div></div>
+<script>
+/* Petite page d'entrée : elle charge l'appli depuis Google (Apps Script) et l'affiche ici, où la caméra en direct est autorisée. */
+(function () {
+  var API = "https://script.google.com/macros/s/AKfycbxTTRFjtGI9Z-oiLErznQGbqAz_PlfHBwue7mh1KhfCITXfDtf-tp6r77h4wu_QiQAGfg/exec", CK = "souk-page";
+  var inj = '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Souk"><link rel="apple-touch-icon" href="icon.png"><link rel="manifest" href="manifest.json"><script>window.SOUK_API=' + JSON.stringify(API) + ';<\/script>';
+  function show(h) {
+    h = h.replace(/<base target="_top">/i, "").replace(/<script src=/g, "<script async src=");
+    h = /<head[^>]*>/i.test(h) ? h.replace(/<head[^>]*>/i, function (m) { return m + inj; }) : inj + h;
+    document.open(); document.write(h); document.close();
+  }
+  function cached() { if (!window.caches) return Promise.reject(); return caches.open(CK).then(function (c) { return c.match("page"); }).then(function (r) { if (!r) throw 0; return r.text(); }); }
+  function keep(h) { try { if (window.caches) caches.open(CK).then(function (c) { c.put("page", new Response(h, { headers: { "Content-Type": "text/html" } })); }); } catch (e) {} }
+  var channel = crypto.randomUUID(), frame = document.createElement("iframe"), done = false;
+  frame.hidden = true; frame.title = "Connexion Google";
+  function finish(h) { if (done) return; done = true; clearTimeout(timer); window.removeEventListener("message", receive); frame.remove(); keep(h); show(h); }
+  function fail() {
+    if (done) return;
+    document.getElementById("b").innerHTML = '<div>Connexion à Google indisponible.<br><small>Les scans mémorisés sur cet appareil sont conservés.</small><br><button onclick="location.reload()">Réessayer</button></div>';
+  }
+  function receive(e) {
+    var m=e.data;
+    if (!m || m.soukBridge !== channel || !/^https:\/\/[a-z0-9-]+-script\.googleusercontent\.com$/.test(e.origin)) return;
+    if (m.type === "page" && typeof m.html === "string" && m.html.indexOf('connectMobile') >= 0) finish(m.html);
+    else if (m.type === "page-error") fail();
+  }
+  window.addEventListener("message", receive);
+  var timer=setTimeout(fail,30000);
+  frame.src=API+"?bridge="+encodeURIComponent(channel)+"&bootstrap=1";
+  document.body.appendChild(frame);
+})();
+</script>
+</body>
+</html>
