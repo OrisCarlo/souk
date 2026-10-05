@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Souk du Pirate · Catalogue</title>
+<style>
+:root{--bg:#f2f5f6;--card:#fff;--ink:#16303a;--muted:#5f7279;--line:#dde5e8;--ger:#3c348c;--teal:#0f5f6e;--ok:#14804f;--okbg:#e2f5ea;--warn:#b25e09;--warnbg:#fdf0dc;--wa:#25d366}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1b20;--card:#16262d;--ink:#e6eef0;--muted:#9fb2b8;--line:#28414a;--ger:#a59cf0;--teal:#5fc0d2;--ok:#5fd39a;--okbg:#123326;--warn:#f0b061;--warnbg:#3a2a12}#logo{filter:invert(1)}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;padding-bottom:96px}
+header{background:var(--card);border-bottom:1px solid var(--line);padding:14px 16px;display:flex;gap:14px;align-items:center}
+#logo{width:58px;height:auto;flex-shrink:0}
+h1{margin:0;font-size:22px;letter-spacing:.02em;text-transform:uppercase}header p{margin:2px 0 6px;color:var(--muted);font-size:14px}
+.contact{display:flex;gap:8px;flex-wrap:wrap}.contact a{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-weight:700;font-size:13px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);color:var(--ink);background:var(--bg)}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--wa);display:inline-block}
+main{max-width:1100px;margin:0 auto;padding:14px 16px}
+.intro{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:12px;font-size:14.5px}
+.intro b{color:var(--ger)}
+#q{width:100%;font:inherit;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:10px 0 4px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 12px;font:inherit;font-size:14px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:#fff}
+.count{color:var(--muted);font-size:13px;margin:6px 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.top{display:flex;gap:10px;align-items:flex-start}
+.tile{width:46px;height:46px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:17px}
+.nm{font-weight:700;font-size:15px;line-height:1.25}.br{color:var(--muted);font-size:12.5px;margin-top:2px}
+.badge{align-self:flex-start;font-size:12px;font-weight:700;padding:3px 8px;border-radius:6px}
+.b-ok{background:var(--okbg);color:var(--ok)}.b-soon{background:var(--warnbg);color:var(--warn)}
+.add{margin-top:auto;border:0;border-radius:10px;padding:10px;font:inherit;font-weight:700;background:var(--teal);color:#fff;cursor:pointer}
+.step{margin-top:auto;display:flex;align-items:center;justify-content:space-between;border:2px solid var(--teal);border-radius:10px;overflow:hidden}
+.step button{border:0;background:transparent;color:var(--teal);font-size:22px;font-weight:700;width:44px;height:40px;cursor:pointer}.step span{font-weight:800}
+#bar{position:fixed;left:0;right:0;bottom:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:var(--card);border-top:1px solid var(--line);display:none;z-index:5}
+#bar button{width:100%;max-width:600px;margin:0 auto;display:block;border:0;border-radius:12px;padding:14px;font:inherit;font-weight:800;font-size:17px;background:var(--ger);color:#fff;cursor:pointer}
+#sheet{position:fixed;inset:0;background:rgba(10,20,25,.55);display:none;z-index:10;align-items:flex-end;justify-content:center}
+#sheet .box{background:var(--card);width:100%;max-width:600px;max-height:92vh;overflow:auto;border-radius:18px 18px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom))}
+.box h2{margin:0 0 10px;font-size:20px}.line{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:14.5px}
+label{display:block;font-weight:700;font-size:13px;margin-top:10px}label input,label textarea{display:block;width:100%;margin-top:4px;font:inherit;font-weight:400;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.hp{position:absolute;left:-5000px}
+.btns{display:flex;gap:8px;margin-top:14px}.btns button{flex:1;border-radius:12px;padding:13px;font:inherit;font-weight:800;cursor:pointer;border:1px solid var(--line);background:var(--bg);color:var(--ink)}.btns .go{background:var(--ger);border-color:var(--ger);color:#fff}
+.err{color:#c0392b;font-weight:700;font-size:14px;margin-top:8px}
+.done{text-align:center;padding:10px 0}.done .big{font-size:44px}.wa{display:inline-flex;align-items:center;gap:8px;margin-top:12px;background:var(--wa);color:#fff;text-decoration:none;font-weight:800;padding:12px 16px;border-radius:12px}
+.empty{text-align:center;color:var(--muted);padding:30px 0}
+footer{text-align:center;color:var(--muted);font-size:12.5px;padding:20px 16px}
+</style></head><body>
+<header><img id="logo" alt="Souk du Pirate" data-b="iVBORw0KGgoAAAANSUhEUgAAAVQAAAGFAgMAAADfnuOsAAAADFBMVEUAAAAAAAAAAAAAAAA16TeWAAAABHRSTlMA_7BgpHydlwAAGOxJREFUeNrtnWuQHNV1x3_dM7s7aFeria2XrYWaEIixkVPjIMLDDmpUxDgVx5lg7SpoKdemCmyDZDNV5oNJmaSpcmIS57HlSBhjO7UfVjLalfG47HKFCobLIwbz8jgRGAy2x9QK9AKPpF3t7Mz0dD7063ZPd0_PaPji0B9gNNP973PPPfec_zn3sfBbeKV+083NSW+84Ok_KidGVZPeWKT2Fsg6TOuF_sva1ZUYVSfzFqBuYTtvhQbKbwFqE4DDE98RCW5WkqKu_tMHTnLFGCg7C33UgHmGlTHA3Kd3vDfdhb3suwFg1Y1v9FFWpVwC4Mw3+6oBzf6wVOqnZWWdD_sf7CPqu1ypv1bqm2V95P7rvH8NFFD+JNsPGxiWPjfmYa5U6IMGGm2WVuqDZbU3a784e1kVrc3YvnH2qKfkkbqh1P9Y0Brck_Mc2Vmhqle7Kqiuu7wEYEydvaymg6H8+CsXXDwLrK2dfW9xl_PQxksWPzSkwylDnC2qUfmV_SlTnDn3Xbsvh8ZC6az9a_n8ch6A8594BFgC87Lps9ZrrmUpduhLdWD7vwNHzr63SrwIwMIYoGgzgOHasCl6ttc6AKIEmJPPAfZ7WLN34p4eUW+kpQHqkA5Q_0wZsIwg9Q9i8D5Gb+gF9RAIQBm1_rlwBODrAK8KLmT02rW9oF5k_a9m61L5AUD9VlKHi7D5ymt5vYdYMH9pDoDRU_ZXx_cGmIFyi9a9rC9Z_3PGgiKCscD8eg8aWLSfdTDutCVT3u+4nXqh61jgBK6Pug63an+4zLJVZdwZqt3IanlT5QvOv49qvpCg3DLxwNXdo1qCtAZc2uHvrFUap24vdo16xspP3Fi76CcEDQGnRI8RZuAZ59NyO6pNyLtBNaw46La7dY+vN+_Ve_Kv1jUq8QEgaxvCJ1Zne_RZBYC7UD4BsKLxCw0nX1L_XEvus_yheRpQN2M+IEB5UJDR4JiFtpLYa6eOjl8_viuo3AwcLYH6ZcgUoLXFMqtGQtTWV3YDxyaFlB9C5hngPlgnoJoF7l0L0JhMFgsO77Duq9_t3l8BGptJ8wbUyJKZAU7e20WEuaLoeqJ7q7ZT0QCjonyr0oBq6utaUwOUOyrAQEpPgvq8ZN6fkoetUHnW8uHTag7glaeAT96XSK8_kzWsW_5dA2p6hpYOqk7FLAOsTLSx0CjU0SKAcrOnUPs6TRa2aAxAhh92yQk3WL5t2_xRgBHvhx9qZahPqTfConKVLeLgXCJUNW_7Nh49rMHR3W7XITQwRs7RQDGF3UVLyWS9xPv4o89i2T1kIX0p2gdBrcAJhXty0lDujDoFoM5Yo2nBsnvLBGbgWBFDoNwKLcvxDU7lk6AqAkg7yeCPJUK1qEPxBCnYUjecwFi_5T0iAeoWgA0Oi2wd1cD21e+Ex0Qds8QUj8HjNjNozSRAnQIUj5o+epvlvSwPamhrisMlRShbZRbaGVURgV+WdYcGmBcgOPz6kebCR4GM0_Ahna2dUDPuf5xLACU7bmv3ZVtTK8XM+YrFES3fcsX6iWYHWX3lALDG6v5qFd7IIR77IKrGt+8yWfmQQ1r2jmFeL2JRz2g+tQJ5wLwpb_vYz7N2rbIeM_i0HouaEsEfDDd0CnL8gbY0ZU4z4neqg7ePxaIaWkCttL5vK+V8qPHE03__sf+8ho3wpC_R_VUc6pqmFlCrkxHo_AQMfWjqvf94OpvKw_flW+7+7zhWfOEHTDgeyPrWaTD6h+LyJ4Gf_sKgeuQOYPVpn6PbEyNr1ZQ173wJtAQfAtTvDhaV3Vt14KTvnmNxGtDCSgyGZcLNKTDvaJ5I0xKwyvBz7WI0anhR2jb4bTqYaqaRWysELL3S3qDuGJHlP1YqwDu_Vxqa3gOkDmmhVCcE1QzvxWektKO0cki9HjDzYZYSjWpEvCwjgIemoXVVm7PY7tYl1CS+RRqPOW_Y6WA+J3uPDdOcqUahNqUsqC3q3Oa1Q7N4kOLVod6nmTeVIlBzEd31HE1r4Kd995m2Zd+888aTM7BvR4wNhFQW3VpAgJ_PWva47S81yqDs6yHbaHrJoVNyec2yZwG0tHffkg5HrUbIigag6RiYB3Y+TMEegLWyqwjj9g9oEXrVIXzKIVeF5jaoXTpxsHH35CHMO_NA65swMWux3VNTUTlMVKGSF3OQMiA7uG3Tmkumvvgkv_smwFw5__x4z5WnJcC8CH6HuyoMq2Moz58DcPRfT_1XJ+4SPePVAszHNZrZEVhZrKAsWu3aNzmTiGcpoWrQgceyNKmPj39cyWDkhfu6DqirolWgAQ9lOVH9DWA24Xsi_BE1fMC6_rfd7qYt2zNHIPPZiIp3BKrM2f3WUXlSY0SA2URZtH1QfddZ1YoVjczhrPXiJpzveOljN3RCvZRAJiDJmhY035y2UHMomyTX2gH1SaIr1muAZtlyfiWUz0c5IzVRsu1cJ4BGxjIxnVrOTQnuFYd3xqJatDn0bULRoLVopR2QLbpNa+wtNoqxsr5bj665CGAbLMAKvCqA487djel4DehSgc0_lt+hAasp1CCr8mcArcvtX4vxev19PxeVo+wLAGk9C_w6bWVL5hkbKL5CkrLiUZiDVZ4SgKJNK7vu12qK5VI+Y72_devRnaLjKAib1R60umY6k_9J9eE1igV3bMEONLsbbuU0hGnuFQDqgXZR_9rmlee9Cmw+FKL5+yJl1Xz10DDX+4vy5NFt_xxZR4uJBSGNGHEoX+blAo8OxNQF1Ki41Yqy2mm7HWFkpCU6+axy6Cge0P5Wo1W6clcqD4P+36936Ghk5IbBsCDzqf277ijAvk3HrgMan_FlBdcdm611ktW8p03W9IZrfC03_8NpkFJA2cMj57QiUR2v1jZ3lX59D8B7paz5qO0fdk5qpoDWv+lRqJXIOGt9ccpxI+sOfMwa_BP7C+wbBzivEoXqGNtA0AqczjnPsujJu9XJmwB4BPjRhAYYl0Wh1qIs1kmujL_ZDut2FYBzywDHvSD7uShjTzmz5JOFzvFR_Tgh4ztkbBnCdmrfcr6Zg3nWfbAEsPbEQIHr3MdaC2MAazsOTC51jGeT3S9ekcx9zFtIcrgIQ7Odo2E5mOpteKDNmPcddD5u2qcp2zs7Ec5xZlqG9mSljDs4zK6J0XbId27le+WTzqeQROlrxZiKeNhY3eWyrPX2p+bxHMDw_hdeeOHw56wpyKXnu5KVmfbcq+oNu5OTVt_Ys7OJUQ+1U5imFCYYsmoWZ7pD9Yy44e9VZwxv0ECao0+G6gnRKvmLDs51u+WyukL15pnZJ+QY6XqxU7OxUSi6phnIvgIGaw3RV7pCleoWEQ+e1kITglhU6dsVEZ7fz8SpIBxVUiz3+H2Ccz0LwMvdoFolaF_4qoZWouqiG9S6R4TnYitRejeongoaN2gRGbhbmE2MyuWe2BMloodKpStUaQ7EDF_aZJSjSz9RqK05z3FFLG1aCOvEDoxIGd1RbvMx7SnZGdEVKsb2dwUJZAjHN0vdoTK6wf34jWjVH+kOVf0qxKrAGq6t7lAVqW2tIhe035GPyh_i9CoPm9d5Knn+EKtXOX60poxyBHnuEvU5WdjlkG7JRHqCGFRji69rTrf5g0WixkFc3aUu4xynGK7SblENuaJ2rGiE1eK6R+U5mRafaOnBkPj9qDQ6FtX4tI_Ybwkrdyqz3aJyWpdLh_Xgz2OA+XjXqL4mz7QlYFU_1UuMuuhTwWJYvrfcPapsXC3qYahG96jGbR6sOWVoIQmE2j0qy7NhVFFmpKbePSpPScJqoTxXJEb1wrwxTVSNMXJRbQTqVflAKA1PJLtE3ZELI0cRNfR8XAogXX_8qJTsGhXvFSWSXWGypjau83FKra0g4ZOymgx10F9Qbt0W37KEsm4OmFA9SrGZblBnmmE8LUSxj3eBqurZMJ4WyVSS6XWojT4ua_6g4j6sJZd1rD0Yu_3lW4Zgj7tsItRSe3a_XAlX7NrEqKqeicnC_YpNvhNgKIyV10IJ0KjuK9PEoY4R5zB93dVFzl1UYglisaexpYhQ7nilY0QnekLNhDPSk7NBDYdG9yjUzRE7AJ+KLColiVvPRiRmTny9KI48R6IOR+1_sziKcrX0VQ5YtTMJ6kVRM9IvtvuSKrB0MgnqTNQadotrm_Mlv0bDlzcF_r16QQkv1OWqxy0C9PP_kbQFyt6ZzrLWwtMyWHZUEHDpZhJOmIsKGy3NTjeagXZmE6AWw4qiAGKM6cATLSKcSxA1JULfbcXEhYDjHokaWkFUM3psm1o9MJaaSbO4YSJlZcx2XHkfqprME5ajMoS6XeWqykMrlGoHUZfC9WSpQF_xo5YimUa7XiNRqVh1Bne6XkSSJLUtjY5AzcKipYKmZy9RBS01Ic+lCoq7HAFwVmPoCVDzkRtkhGuaKTkqKFoC1Gps+pFtyjadjebqbaiZmNwzrcioejTZVIPtzMbIqrSCOklWJxSR+6uzANb6bOE9qehnL6u9CsNCvcwi+8n4QDz1r3ioNwBhtbN21FSnTf5e56gi0lrDl+RGjQLgtEQd2R5pht2uptMcVzgCT9z83oi70rERNwTVjgQpDSrbErM3I1kh5nxi_Hu3NkDWUvHqPETFzTZUs6MGbMe30Sk8JdHrcAdZNdsNXjFGcJ147zag2BXH0bEOj6aDTrsZg2raW8UbALco9yVEBe3hhHJvuJqksq4MilSiYtz4h7PJsw1lIpGcy_MT2S5yGKMQaVzZbro10JEjkagL3bxAbctXRSfjGtS6RY0WwxtISqFbVD1S1qobBRpd61V00gBEJQ4xqFoce7P12vm97bJGxOLkXi00Gpoi1mf1gmpEh02PrtC1ZU3F+WJJtd2hFuhwQNBIL6jpTn682TFehqCuxPeyRjNRuVRNqrOa5iRbta5Ro7nTGcsGqtG7GuJRQ7MSVgnHHZS7RjUi85iNrsXqPckarreSi6r1hBobD0UiBqG258ZG_O1KD6ivabGPDScyrDbUpdmI7rjR0XmuB1SeiVgV8YwzCLK9oOYiUHO2LSt6L6jFCIOt2uMuQdQKQdXjgqgqkp0jFqaByMVcHVlzJOqhSE8AfDqZCbSj1iI8gbACUKLOakc1IzyBSD5ew_yAHjU_SHSVoTPqFBCdnUz1iHooLpVTtR5RV8LDl9VL59Ajaksjel5kqldUpomcF0lpPaMuELb2LicFr15Q64B5MPTu6d5RDR04Hu6zekdlSxj79fKCHlFXiNsW1itqS4_zW72isgUYbPYbtQ6Y15dklpVYpdGoRgWkxfUw+mUSZgRxFZKnNaDlrqlPfUkkBoyru0wjD9tXhS+H6Rn1lxpgzB0EuHC8ayuL8KRGsQDMs5OCeZAuDpmKrzzZZKLRmD8IsL4PNgAYvn1Ug3v6Iys_k_yTchN9QuU8t2QxcIvWn94CjMnUq0WAW67eT99Qwdi05uXnNWXeGlZan1Dh5Po+epewK3v2fuBsr8SolT74gdgKSb_12ncN6N30VtKzlVPnAPyg0l9ZV0lJV_9Qa04tp6+olpSN_qJaJzTFZGI9oTqd+ko_UVOOC18RfbSsC9wM7Kf_2zdZV_IeWRp_MMEDSUJyyuZGAw0AdTtvX29fv4XXlQcmvtM2fLfOjc8dPIvIrW46aO7fFVhjsHr9PPMHpERmTWvu4Z+Yv7FTT3OuOTrfBNaYprnm2EQVtu7d2TRNs2qP2MNFgA17Ln1aSlu+JEA6fBUGLJLYsF40DtZ2Y3s37dAsF1ruYngGFbiwyMAeOFqakUCvFSjj0uGrznEQA7b0D2AfCbg8DaDOwss6wI4ZUCGVZ3D_hiOw704PdQgG5yYegLqngzGLy1vXqbIz13cuwPVOTrlhu6XXVXATPDYdKFoM7oNTC3IyZ+ry5PaCsyqjpTmzfjXss0NUqFmFj3MDnbgO4AlNjlVT8kRcza3D6c7XCgxp9uM5Kyy3dKkoUHaEKsqxqizzXdX1zVlndZXpTLCqULTXnOUlUXXHyoxAuPaKfYZMwZxKh121U0kJu1bV9ApOv+fO6vpa4CdxmhEsnmScxe2qpynp6bxHKvP+OT+JvYh0EHWz016VEVc_uiPJaukVTV9KH3VZRckZVXdQay7qlNOpF0m1SxPeLIUiaWlPK_bSwgG3J_NyF7tN8vpa8w59DDCtRZncA4q7tV9ta4aFWpFLBaanblnWdjUUXFSv_LUk3a_LacZAaKVMGwmkbWPubgdV6vyW952iyQ_Uw7O+ptfGNECxSYhenTYpupyt1HybfiSuk2t66IuAKrKEyOo02xDy5h+ViCKhZKa2m_Oh8mn_wFGFLJLhAfizo6o0CrLAmIyqwZt+1CG_aehRBU0JtQoUvbkEVa6p2qufn_EX8DX5fKZrIhNFVbxD0lrFK2AuubdnQx1KWbbjlJ72MpEMDPFXEmoLeE34Xuqfc63I_q8a8jrr5jFVC3Bt3z7fYaK2aeMvo1f9Wc6AHEoGwxO2sOzB_y7dhzokn++hWiDHA+6g3LmO4m29UyDNZvnAWtXSQV1alrRE2zRnfPbQhEWq8pYn1d6bJJ38MBzwR3nZ_4XlnO2zIaqzccbb7l0LyFbttHAmJRjxbyJxB5FHffIhQ0gPUW9OrlRmfFpTXdt3qU81MFvwovvpx_5WjEjdu9lXtVe9ozC+1bHCYvrFNSWfNeOzSBV3dsWhPuVAHho1U1Zpeo1b1n3KV4GjbdtxjUjDjHC0g_jWCqnAKft0vRfCrT7lhobhyHc30z4jVyVpzC+Eytpy7eIi_4rPdKDaE0B1dqi91IGhVH1dKSRPyLm6TBss1OU9UuDKh5Tuyu08AbHo_ajoBXhjKjAKNmj+OmMprPJGtItUOSJ7O8eGZv1BoxowdvelR8LjV43TmkQYHdQndHcQBs5B4qIE66ACRRz3_stdEV8MjK+qaxO5cK3EVHNO6zJ_K0cFkrAr7+YcwkV1UrfLNNsC1XxM3Iqv+ZXaOOHitJ1AGf_UVs9NxxZ6LWt7ToqVqscgFpzfW20B2nR1kQlxsFa7Dd2LFCoPSgayHFYP9XoroGHNe23WAm8ddFCbQULOZn_09vF56QfhaLFgbZqbBuYc1JTkhE0CBLnNj8iZUdnPuY543lDlKqlFFv0tt62rtIt4a30uVr5lBmtlnB2+VYQI3pb2P6K5J94vyD+orl7LlsaNivtS1T9GtPZQqsJ7gumI34Wng3uPrJzbG4IaWHsAtbAQ2JL9TFPuQacTdzga8I4V0KQUS0i0y7ceR0QnXIckG5CDv+oOFs87b_afW1DyZNUC2d+KG6RUnxgD7m012Ylrko5cB5tTJF2kHb71kgBQR71GCceCzsha0yVCUJB+KA62GbQOHARQTa9R7nYgQ_eWEqmyWR7xPLMq0qEZ2DFHAycCnhymvMM1hmTLX_J8aMq3GmLRNQsTQFVcT9PyTPdZjSXdLWJt9LHjkuOqRXgIEIB6yh30W6T91bpbGso7lTyHjtiOa0aVY8GI6wy97a032GN5RW5R0ymWrJfs8oD953Vo6YZsJU23NxlzUFemgAt1Ka4s2y1QP8IquSj3qE793t2g7JDyReHa_ILN8VXYbn0qoeoyWTGnrL5q2wHcONaaXJADrhcHl3XrIDwVdUeF+qR51B+IfwlLDzL60eCiqi2AuaNeZNC9f7XjCoErLGtXGeBZqE_s9i_pMirwtYeudQp_nmocMHfyP3UX4BzZfmoazF1CJU3LqrNtmJEff06Dr9K+m+z9QWI2KBgA064xnLcHjpUUhAbma0UG9wWeP7ob1n24EFRr_dYT+G7e+sM0qaY7VLaKR9w3bg3NLkQoD1hjrnl7guHt6+3rt_lKzc09CIzO6auspT6Mzs0JSM3NwPvmvgPAxcCVc3Nz8L65uZnouqTnWC_W0XUW53f9y7ftcD1PCozjL8PwPMVpYO5ieHkeYHg+rGzUnvUVNs28Ai1FO2OzIuPq+w1Az8KhxsIJAF2AOjs0Ay8OHaMDquX4yquDbzd0N5w8WQNSCFDWLm4EFh_R2+umMqp9EDktO7ZlQzilkgJMBGQcljwF7t+UakPdai4s21i6CCRCWeEriwznslDxHexwyRnZxacB0zxoHoQJkP5+r7_8NilsgU2A5tqXvXrW6tNAakpMMM46bZxHNEinXn_YqzzaJS1tFykwPQ3oFzv6uDwDNL_4F+5PAx+Zxz2M+_j8PANz16XTxnpL2uMCuP4AVIeD0poH7nf+7MHA2AXAB56p+dI+WNYEMD5QeERjv2OvCkDq1c8VwitaBycPQFUAA00d+LXistJm47tWPehjN2vMh9iAMeYQfKH5sgVlvuDYzpm_E8BD15nBut7KOVqEZVk12CzomlwG9JlXoQTcqZgikGv5jxlWQ5LolApslXvL+7VShVR9TghfXSaYJoXVaVYpgK5nymH1oCaYWdmAmU3gXaiMr9sI5H7+zxfb77c2DYt5aFJrwHAWctAcAZoD43oC75LSjg9OAy81HtMcJlkEUnoFykNmq8jGExSXYaxuMeuu_vTkVvH_I6D8H05FyclVF6rzAAAAAElFTkSuQmCC"><div><h1>Souk du Pirate</h1><p>Matériel de surf, bodyboard et glisse au Maroc</p>
+<div class="contact"><a id="waTop" target="_blank" rel="noopener"><span class="dot"></span>WhatsApp</a><a id="mailTop">✉ soukdupirate@gmail.com</a></div></div></header>
+<main>
+<div class="intro">Choisis les articles qui t'intéressent, puis touche <b>« Demander un devis »</b> : on te répond avec un prix personnalisé, gratuitement et sans engagement.</div>
+<input id="q" type="search" placeholder="🔍 Rechercher : palmes, leash, Science, taille…" autocomplete="off">
+<div class="chips" id="cats"></div>
+<div class="count" id="count">Chargement du catalogue…</div>
+<div class="grid" id="grid"></div>
+</main>
+<footer>Souk du Pirate · +33 6 40 20 50 55 · soukdupirate@gmail.com</footer>
+<div id="bar"><button type="button" id="open">Demander un devis</button></div>
+<div id="sheet" role="dialog" aria-modal="true"><div class="box" id="box"></div></div>
+<script>
+(function(){
+"use strict";
+var TEL="33640205055", MAIL="soukdupirate@gmail.com", WA="https:"+"/"+"/wa.me/"+TEL;
+var API="https:"+"/"+"/script.google.com/macros/s/AKfycbxTTRFjtGI9Z-oiLErznQGbqAz_PlfHBwue7mh1KhfCITXfDtf-tp6r77h4wu_QiQAGfg/exec";
+function api(fn,args){return fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({fn:fn,args:args||[]})}).then(function(r){return r.json();}).then(function(j){if(j.e)throw new Error(j.e);return j.r;});}
+var $=function(i){return document.getElementById(i);};
+var esc=function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});};
+var strip=function(s){return String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();};
+try{var g=$("logo");g.src="data:image/png;base64,"+g.getAttribute("data-b").replace(/_/g,"/");}catch(e){}
+$("waTop").href=WA; $("mailTop").href="mailto:"+MAIL;
+var ITEMS=[], CAT="", ONLY=false, CART={};
+try{CART=JSON.parse(localStorage.getItem("souk_cart")||"{}")||{};}catch(e){CART={};}
+function saveCart(){try{localStorage.setItem("souk_cart",JSON.stringify(CART));}catch(e){}}
+var COLORS=["#3c348c","#0f5f6e","#b25e09","#14804f","#8a2d5c","#2d5c8a","#5c6b16","#7a3d1a"];
+function col(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return COLORS[h%COLORS.length];}
+function ini(s){var w=String(s||"?").trim().split(/\s+/);return (w[0]||"?").slice(0,2).toUpperCase();}
+function nInCart(){var n=0;for(var k in CART)n+=CART[k].q;return n;}
+function bar(){var n=nInCart();$("bar").style.display=n?"block":"none";$("open").textContent="Demander un devis · "+n+" article"+(n>1?"s":"");}
+function cats(){var cs={};ITEMS.forEach(function(it){if(it.c)cs[it.c]=(cs[it.c]||0)+1;});var ks=Object.keys(cs).sort(function(a,b){return a.localeCompare(b,"fr");});
+  $("cats").innerHTML='<button class="chip" data-c="" aria-pressed="'+(!CAT&&!ONLY)+'">Tout</button><button class="chip" data-only="1" aria-pressed="'+ONLY+'">🟢 Disponible maintenant</button>'+ks.map(function(k){return '<button class="chip" data-c="'+esc(k)+'" aria-pressed="'+(CAT===k)+'">'+esc(k)+' · '+cs[k]+'</button>';}).join("");}
+function draw(){var t=strip($("q").value).split(/\s+/).filter(Boolean);
+  var ls=ITEMS.filter(function(it){if(CAT&&it.c!==CAT)return false;if(ONLY&&it.a!=="dispo")return false;var h=strip(it.d+" "+it.m+" "+it.c);for(var i=0;i<t.length;i++)if(h.indexOf(t[i])<0)return false;return true;});
+  $("count").textContent=ls.length+" article"+(ls.length>1?"s":"");
+  $("grid").innerHTML=ls.length?ls.slice(0,300).map(function(it){var q=CART[it.k]?CART[it.k].q:0;
+    return '<div class="card"><div class="top"><div class="tile" style="background:'+col(it.c||it.m)+'">'+esc(ini(it.c||it.m))+'</div><div><div class="nm">'+esc(it.d)+'</div><div class="br">'+esc([it.m,it.c].filter(Boolean).join(" · "))+'</div></div></div>'
+     +'<span class="badge '+(it.a==="dispo"?'b-ok">● Disponible au Maroc':'b-soon">● Bientôt disponible')+'</span>'
+     +(q?'<div class="step"><button type="button" data-m="'+esc(it.k)+'" aria-label="Moins">−</button><span>'+q+'</span><button type="button" data-p="'+esc(it.k)+'" aria-label="Plus">+</button></div>':'<button class="add" type="button" data-p="'+esc(it.k)+'">+ Ajouter à ma demande</button>')+'</div>';}).join(""):'<div class="empty">Aucun article ne correspond. Demande-nous sur WhatsApp, on peut souvent le commander !</div>';
+  bar();}
+function find(k){for(var i=0;i<ITEMS.length;i++)if(ITEMS[i].k===k)return ITEMS[i];return null;}
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("button");if(!b)return;
+  if(b.dataset.p){var it=find(b.dataset.p)||CART[b.dataset.p];if(it){CART[b.dataset.p]={k:b.dataset.p,d:it.d,q:(CART[b.dataset.p]?CART[b.dataset.p].q:0)+1};saveCart();}draw();if($("sheet").style.display==="flex")sheet();return;}
+  if(b.dataset.m){var c=CART[b.dataset.m];if(c){c.q--;if(c.q<=0)delete CART[b.dataset.m];saveCart();}draw();if($("sheet").style.display==="flex"){if(nInCart())sheet();else close();}return;}
+  if(b.dataset.c!==undefined){CAT=b.dataset.c;ONLY=false;cats();draw();return;}
+  if(b.dataset.only){ONLY=!ONLY;CAT="";cats();draw();return;}
+  if(b.id==="open"){sheet();return;} if(b.id==="close"){close();return;} if(b.id==="send"){send(b);return;}});
+$("q").addEventListener("input",draw);
+$("sheet").addEventListener("click",function(e){if(e.target.id==="sheet")close();});
+var FORM={n:"",t:"",m:""};
+function sheet(){var ks=Object.keys(CART);
+  $("box").innerHTML='<h2>Ma demande de devis</h2>'+ks.map(function(k){var c=CART[k];return '<div class="line"><span>'+esc(c.d)+'</span><span class="step" style="margin:0;flex-shrink:0"><button type="button" data-m="'+esc(k)+'">−</button><span>'+c.q+'</span><button type="button" data-p="'+esc(k)+'">+</button></span></div>';}).join("")
+   +'<label>Ton nom *<input id="fn" autocomplete="name" value="'+esc(FORM.n)+'"></label><label>Téléphone (WhatsApp) *<input id="ft" type="tel" autocomplete="tel" placeholder="+212…" value="'+esc(FORM.t)+'"></label><label>Message (taille, couleur, ville de livraison…)<textarea id="fm" rows="3">'+esc(FORM.m)+'</textarea></label><input class="hp" id="fw" tabindex="-1" autocomplete="off" aria-hidden="true"><div class="err" id="ferr"></div>'
+   +'<div class="btns"><button type="button" id="close">Continuer</button><button type="button" class="go" id="send">Envoyer la demande</button></div>';
+  ["fn","ft","fm"].forEach(function(id){$(id).addEventListener("input",function(){FORM[{fn:"n",ft:"t",fm:"m"}[id]]=this.value;});});
+  $("sheet").style.display="flex";}
+function close(){$("sheet").style.display="none";}
+function waText(){var ks=Object.keys(CART);return "Bonjour Souk du Pirate, je voudrais un devis pour :\n"+ks.map(function(k){return "- "+CART[k].q+" x "+CART[k].d;}).join("\n")+(FORM.m?"\n"+FORM.m:"")+"\n"+FORM.n;}
+function send(b){var n=FORM.n.trim(),t=FORM.t.trim(),err=$("ferr");
+  if(n.length<2){err.textContent="Indique ton nom.";return;} if(t.replace(/\D/g,"").length<8){err.textContent="Indique ton numéro de téléphone.";return;}
+  b.disabled=true;b.textContent="Envoi…";var lines=Object.keys(CART).map(function(k){return {k:k,d:CART[k].d,q:CART[k].q};});var wt=waText();
+  api("publicRequest",[{n:n,t:t,m:FORM.m,w:$("fw").value,lines:lines}]).then(function(r){var link=WA+"?text="+encodeURIComponent(wt+"\n(Demande "+(r&&r.num||"")+")");CART={};saveCart();draw();
+      $("box").innerHTML='<div class="done"><div class="big">✅</div><h2>Demande envoyée !</h2><p>Merci '+esc(n)+'. On prépare ton devis personnalisé et on te recontacte très vite au '+esc(t)+'.</p><a class="wa" target="_blank" rel="noopener" href="'+link+'"><span class="dot" style="background:#fff"></span>Prévenir aussi sur WhatsApp</a><div class="btns"><button type="button" id="close">Fermer</button></div></div>';})
+    .catch(function(e){b.disabled=false;b.textContent="Envoyer la demande";err.innerHTML=esc(String(e&&e.message||"Envoi impossible."))+' <a target="_blank" rel="noopener" href="'+WA+"?text="+encodeURIComponent(wt)+'">Envoie-la sur WhatsApp</a>';});}
+api("publicCatalogue",[]).then(function(r){ITEMS=(r&&r.items)||[];cats();draw();}).catch(function(){$("count").textContent="Catalogue indisponible pour le moment. Écris-nous sur WhatsApp !";});
+bar();
+})();
+</script></body></html>
