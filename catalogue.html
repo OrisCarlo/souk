@@ -21,7 +21,7 @@ main{max-width:1100px;margin:0 auto;padding:14px 16px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
 .ph{position:relative;aspect-ratio:1/1;border-radius:10px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;border:0;padding:0;width:100%;cursor:pointer}
 .ph img{width:100%;height:100%;object-fit:contain;background:#fff}.ph .n{position:absolute;right:6px;bottom:6px;background:rgba(0,0,0,.6);color:#fff;font-size:12px;font-weight:700;border-radius:999px;padding:2px 8px}
-.noph{cursor:default;color:#fff;flex-direction:column;gap:4px;font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.04em}.noph .e{font-size:34px}
+.noph{cursor:default;color:#fff;flex-direction:column;gap:4px;font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.04em}.noph .e{display:flex}.chip{display:inline-flex;align-items:center;gap:6px}.chip svg{flex-shrink:0}.b-cmd{background:#ebe9f8;color:#3c348c}@media (prefers-color-scheme:dark){.b-cmd{background:#2a2550;color:#c9c3ff}}
 #lb{position:fixed;inset:0;background:rgba(5,10,12,.7);display:none;z-index:20;align-items:flex-end;justify-content:center}
 #lb .fbox{position:relative;background:var(--card);width:100%;max-width:640px;max-height:94vh;overflow:auto;border-radius:18px 18px 0 0;padding-bottom:calc(16px + env(safe-area-inset-bottom))}
 @media (min-width:700px){#lb{align-items:center}#lb .fbox{border-radius:18px}}
@@ -58,7 +58,7 @@ footer{text-align:center;color:var(--muted);font-size:12.5px;padding:20px 16px}
 <div class="contact"><a id="waTop" target="_blank" rel="noopener"><span class="dot"></span>WhatsApp</a><a id="mailTop">✉ soukdupirate@gmail.com</a></div></div></header>
 <main>
 <div class="intro">Touche un article pour voir ses photos et sa description. Choisis ceux qui t'intéressent, puis touche <b>« Demander un devis »</b> : on te répond avec un prix personnalisé, gratuitement et sans engagement.</div>
-<input id="q" type="search" placeholder="🔍 Rechercher : palmes, leash, Science, taille…" autocomplete="off">
+<input id="q" type="search" placeholder="Rechercher : palmes, leash, Science, taille…" autocomplete="off">
 <div class="chips" id="cats"></div>
 <div class="count" id="count">Chargement du catalogue…</div>
 <div class="grid" id="grid"></div>
@@ -82,8 +82,14 @@ var ITEMS=[], CAT="", ONLY=false, CART={};
 try{CART=JSON.parse(localStorage.getItem("souk_cart")||"{}")||{};}catch(e){CART={};}
 function saveCart(){try{localStorage.setItem("souk_cart",JSON.stringify(CART));}catch(e){}}
 var COLORS=["#3c348c","#0f5f6e","#b25e09","#14804f","#8a2d5c","#2d5c8a","#5c6b16","#7a3d1a"];
-var RUB=[["Néoprène","🤿"],["Bodyboard","🏄"],["Surf","🌊"],["Accessoires","🎒"],["Wax","🧴"]];
-function emo(r){for(var i=0;i<RUB.length;i++)if(RUB[i][0]===r)return RUB[i][1];return "🏝";}
+var RUB=[["Néoprène",'<path d="M9 2.5h6l1.2 2.2 3.3 2.4-1.7 2.6-1.8-1V13l.8 8.5h-3.3L12 14.5l-1.5 7H7.2L8 13V8.7l-1.8 1-1.7-2.6 3.3-2.4z"/><path d="M12 4.5v6"/>'],
+ ["Bodyboard",'<path d="M7.5 3h9A2.5 2.5 0 0 1 19 5.5V18l-2.4 2.6-2.3-1.4L12 21l-2.3-1.8-2.3 1.4L5 18V5.5A2.5 2.5 0 0 1 7.5 3z"/><path d="M12 5v13"/>'],
+ ["Surf",'<path d="M12 2c4.2 4 5.4 9.3 4.3 14.2-.6 2.7-2.1 4.7-4.3 5.8-2.2-1.1-3.7-3.1-4.3-5.8C6.6 11.3 7.8 6 12 2z"/><path d="M12 4.5v15"/><path d="M12 17.5l2.2 2"/>'],
+ ["Leash",'<circle cx="6.5" cy="6.5" r="3.2"/><path d="M9.2 8.6c2.6.1 2.4 3.1.4 3.3-1.6.2-1.2 2.9.9 2.7 2.1-.2 1.7 2.8 3.9 2.6 1.6-.1 2.3 1.3 2.3 1.3"/><path d="M18.4 18.2l2.4 2.4"/>'],
+ ["Accessoires",'<path d="M5 20h14"/><path d="M8 20c0-6.5 2.4-12.2 8.5-16-1.2 5.6-1.4 10.9-.3 16"/>'],
+ ["Wax",'<path d="M4.5 9c0-1.9 3.4-3.4 7.5-3.4s7.5 1.5 7.5 3.4v6c0 1.9-3.4 3.4-7.5 3.4S4.5 16.9 4.5 15z"/><path d="M4.5 9c0 1.9 3.4 3.4 7.5 3.4s7.5-1.5 7.5-3.4"/><path d="M9 8.6h.01M12 7.8h.01M15 8.6h.01"/>']];
+function ico(r,z){var d='<circle cx="12" cy="12" r="8"/>';for(var i=0;i<RUB.length;i++)if(RUB[i][0]===r)d=RUB[i][1];return '<svg viewBox="0 0 24 24" width="'+z+'" height="'+z+'" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+d+'</svg>';}
+function badge(it){return it.a==="dispo"?'b-ok">● Disponible au Maroc':it.a==="commande"?'b-cmd">● Sur commande':'b-soon">● Bientôt disponible';}
 function img(id){return "https:"+"/"+"/lh3.googleusercontent.com/d/"+encodeURIComponent(id)+"=w800";}
 function img2(id){return "https:"+"/"+"/drive.google.com/thumbnail?id="+encodeURIComponent(id)+"&sz=w800";}
 function col(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return COLORS[h%COLORS.length];}
@@ -91,22 +97,22 @@ function ini(s){var w=String(s||"?").trim().split(/\s+/);return (w[0]||"?").slic
 function nInCart(){var n=0;for(var k in CART)n+=CART[k].q;return n;}
 function bar(){var n=nInCart();$("bar").style.display=n?"block":"none";$("open").textContent="Demander un devis · "+n+" article"+(n>1?"s":"");}
 function cats(){var cs={};ITEMS.forEach(function(it){if(it.r)cs[it.r]=(cs[it.r]||0)+1;});
-  $("cats").innerHTML='<button class="chip" data-c="" aria-pressed="'+(!CAT&&!ONLY)+'">Tout · '+ITEMS.length+'</button><button class="chip" data-only="1" aria-pressed="'+ONLY+'">🟢 Disponible maintenant</button>'+RUB.map(function(r){var k=r[0];return '<button class="chip" data-c="'+esc(k)+'" aria-pressed="'+(CAT===k)+'">'+r[1]+' '+esc(k)+' · '+(cs[k]||0)+'</button>';}).join("");}
+  $("cats").innerHTML='<button class="chip" data-c="" aria-pressed="'+(!CAT&&!ONLY)+'">Tout · '+ITEMS.length+'</button><button class="chip" data-only="1" aria-pressed="'+ONLY+'"><span class="dot" style="background:#14804f"></span>Disponible maintenant</button>'+RUB.map(function(r){var k=r[0];return '<button class="chip" data-c="'+esc(k)+'" aria-pressed="'+(CAT===k)+'">'+ico(k,18)+esc(k)+' · '+(cs[k]||0)+'</button>';}).join("");}
 function draw(){var t=strip($("q").value).split(/\s+/).filter(Boolean);
   var ls=ITEMS.filter(function(it){if(CAT&&it.r!==CAT)return false;if(ONLY&&it.a!=="dispo")return false;var h=strip(it.d+" "+it.m+" "+it.c+" "+(it.r||""));for(var i=0;i<t.length;i++)if(h.indexOf(t[i])<0)return false;return true;});
   $("count").textContent=ls.length+" article"+(ls.length>1?"s":"");
   $("grid").innerHTML=ls.length?ls.slice(0,300).map(function(it){var q=CART[it.k]?CART[it.k].q:0;
-    var ps=it.p||[];var ph=ps.length?'<button type="button" class="ph" data-ph="'+esc(it.k)+'" aria-label="Voir la fiche"><img loading="lazy" alt="'+esc(it.d)+'" src="'+img(ps[0])+'" data-alt="'+img2(ps[0])+'">'+(ps.length>1?'<span class="n">📷 '+ps.length+'</span>':'')+'</button>':'<button type="button" class="ph noph" data-ph="'+esc(it.k)+'" style="background:'+col(it.r||it.c||it.m)+'"><span class="e">'+emo(it.r)+'</span>'+esc(it.m||it.r||"")+'</button>';
+    var ps=it.p||[];var ph=ps.length?'<button type="button" class="ph" data-ph="'+esc(it.k)+'" aria-label="Voir la fiche"><img loading="lazy" alt="'+esc(it.d)+'" src="'+img(ps[0])+'" data-alt="'+img2(ps[0])+'">'+(ps.length>1?'<span class="n">1 / '+ps.length+'</span>':'')+'</button>':'<button type="button" class="ph noph" data-ph="'+esc(it.k)+'" style="background:'+col(it.r||it.c||it.m)+'"><span class="e">'+ico(it.r,46)+'</span>'+esc(it.m||it.r||"")+'</button>';
     return '<div class="card">'+ph+'<div><div class="nm">'+esc(it.d)+'</div><div class="br">'+esc([it.m,it.r].filter(Boolean).join(" · "))+'</div>'+(it.t?'<button type="button" class="more" data-ph="'+esc(it.k)+'">ℹ Voir la description</button>':'')+'</div>'
-     +'<span class="badge '+(it.a==="dispo"?'b-ok">● Disponible au Maroc':'b-soon">● Bientôt disponible')+'</span>'
+     +'<span class="badge '+badge(it)+'</span>'
      +(q?'<div class="step"><button type="button" data-m="'+esc(it.k)+'" aria-label="Moins">−</button><span>'+q+'</span><button type="button" data-p="'+esc(it.k)+'" aria-label="Plus">+</button></div>':'<button class="add" type="button" data-p="'+esc(it.k)+'">+ Ajouter à ma demande</button>')+'</div>';}).join(""):'<div class="empty">Aucun article ne correspond. Demande-nous sur WhatsApp, on peut souvent le commander !</div>';
   bar();}
 var LB={it:null,i:0};
 function lbShow(){var it=LB.it,ps=it.p||[];var im=$("lbi");var f=$("lbf");var np=f.querySelector(".noph");if(np)np.remove();
-  if(ps.length){im.style.display="";im.onerror=function(){if(im.src!==img2(ps[LB.i]))im.src=img2(ps[LB.i]);};im.src=img(ps[LB.i]);im.alt=it.d;}else{im.style.display="none";f.insertAdjacentHTML("beforeend",'<div class="ph noph" style="background:'+col(it.r||it.c||it.m)+'"><span class="e">'+emo(it.r)+'</span>'+esc(it.m||it.r||"")+'</div>');}
+  if(ps.length){im.style.display="";im.onerror=function(){if(im.src!==img2(ps[LB.i]))im.src=img2(ps[LB.i]);};im.src=img(ps[LB.i]);im.alt=it.d;}else{im.style.display="none";f.insertAdjacentHTML("beforeend",'<div class="ph noph" style="background:'+col(it.r||it.c||it.m)+'"><span class="e">'+ico(it.r,46)+'</span>'+esc(it.m||it.r||"")+'</div>');}
   $("lbp").style.display=$("lbn").style.display=ps.length>1?"":"none";$("lbk").style.display=ps.length>1?"":"none";$("lbk").textContent=(LB.i+1)+" / "+ps.length;
   var q=CART[it.k]?CART[it.k].q:0;
-  $("lbb").innerHTML='<h2>'+esc(it.d)+'</h2><div class="br">'+esc([it.m,it.r].filter(Boolean).join(" · "))+'</div><span class="badge '+(it.a==="dispo"?'b-ok">● Disponible au Maroc':'b-soon">● Bientôt disponible')+'</span>'+(it.t?'<div class="desc">'+esc(it.t)+'</div>':'')+(q?'<div class="step"><button type="button" data-m="'+esc(it.k)+'" aria-label="Moins">−</button><span>'+q+'</span><button type="button" data-p="'+esc(it.k)+'" aria-label="Plus">+</button></div>':'<button class="add" type="button" data-p="'+esc(it.k)+'">+ Ajouter à ma demande</button>');
+  $("lbb").innerHTML='<h2>'+esc(it.d)+'</h2><div class="br">'+esc([it.m,it.r].filter(Boolean).join(" · "))+'</div><span class="badge '+badge(it)+'</span>'+(it.t?'<div class="desc">'+esc(it.t)+'</div>':'')+(q?'<div class="step"><button type="button" data-m="'+esc(it.k)+'" aria-label="Moins">−</button><span>'+q+'</span><button type="button" data-p="'+esc(it.k)+'" aria-label="Plus">+</button></div>':'<button class="add" type="button" data-p="'+esc(it.k)+'">+ Ajouter à ma demande</button>');
   $("lb").style.display="flex";}
 document.addEventListener("error",function(e){var t=e.target;if(t&&t.tagName==="IMG"&&t.dataset&&t.dataset.alt&&t.src!==t.dataset.alt)t.src=t.dataset.alt;},true);
 function find(k){for(var i=0;i<ITEMS.length;i++)if(ITEMS[i].k===k)return ITEMS[i];return null;}
