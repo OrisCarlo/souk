@@ -51,6 +51,7 @@ label{display:block;font-weight:700;font-size:13px;margin-top:10px}label input,l
 .err{color:#c0392b;font-weight:700;font-size:14px;margin-top:8px}
 .done{text-align:center;padding:10px 0}.done .big{font-size:44px}.wa{display:inline-flex;align-items:center;gap:8px;margin-top:12px;background:var(--wa);color:#fff;text-decoration:none;font-weight:800;padding:12px 16px;border-radius:12px}
 .empty{text-align:center;color:var(--muted);padding:30px 0}
+.opts{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}.ol{font-size:11.5px;color:var(--muted);font-weight:700;margin-top:6px}.opt{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:4px 8px;font:inherit;font-size:12.5px;line-height:1.2;cursor:pointer}.opt[aria-pressed="true"]{border-color:var(--teal);background:var(--teal);color:#fff}.opt.soon{border-style:dashed}
 footer{text-align:center;color:var(--muted);font-size:12.5px;padding:20px 16px}
 @media (max-width:560px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.card{padding:8px}.nm{font-size:14px}.add{min-height:0;padding:9px 6px;font-size:14px}.badge{font-size:11px}}
 </style></head><body>
@@ -96,29 +97,58 @@ function col(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;
 function ini(s){var w=String(s||"?").trim().split(/\s+/);return (w[0]||"?").slice(0,2).toUpperCase();}
 function nInCart(){var n=0;for(var k in CART)n+=CART[k].q;return n;}
 function bar(){var n=nInCart();$("bar").style.display=n?"block":"none";$("open").textContent="Demander un devis · "+n+" article"+(n>1?"s":"");}
-function cats(){var cs={};ITEMS.forEach(function(it){if(it.r)cs[it.r]=(cs[it.r]||0)+1;});
-  $("cats").innerHTML='<button class="chip" data-c="" aria-pressed="'+(!CAT&&!ONLY)+'">Tout · '+ITEMS.length+'</button><button class="chip" data-only="1" aria-pressed="'+ONLY+'"><span class="dot" style="background:#14804f"></span>Disponible maintenant</button>'+RUB.map(function(r){var k=r[0];return '<button class="chip" data-c="'+esc(k)+'" aria-pressed="'+(CAT===k)+'">'+ico(k,18)+esc(k)+' · '+(cs[k]||0)+'</button>';}).join("");}
+function cats(){var cs={};GROUPS.forEach(function(g){if(g.r)cs[g.r]=(cs[g.r]||0)+1;});
+  $("cats").innerHTML='<button class="chip" data-c="" aria-pressed="'+(!CAT&&!ONLY)+'">Tout · '+GROUPS.length+'</button><button class="chip" data-only="1" aria-pressed="'+ONLY+'"><span class="dot" style="background:#14804f"></span>Disponible maintenant</button>'+RUB.map(function(r){var k=r[0];return '<button class="chip" data-c="'+esc(k)+'" aria-pressed="'+(CAT===k)+'">'+ico(k,18)+esc(k)+' · '+(cs[k]||0)+'</button>';}).join("");}
 function draw(){var t=strip($("q").value).split(/\s+/).filter(Boolean);
-  var ls=ITEMS.filter(function(it){if(CAT&&it.r!==CAT)return false;if(ONLY&&it.a!=="dispo")return false;var h=strip(it.d+" "+it.m+" "+it.c+" "+(it.r||""));for(var i=0;i<t.length;i++)if(h.indexOf(t[i])<0)return false;return true;});
+  var ls=GROUPS.filter(function(g){if(CAT&&g.r!==CAT)return false;if(ONLY&&!g.vars.some(function(v){return v.a==="dispo";}))return false;var h=strip(g.vars.map(function(it){return it.d+" "+it.m+" "+it.c+" "+(it.r||"")+" "+it.k;}).join(" "));for(var i=0;i<t.length;i++)if(h.indexOf(t[i])<0)return false;return true;});
   $("count").textContent=ls.length+" article"+(ls.length>1?"s":"");
-  $("grid").innerHTML=ls.length?ls.slice(0,300).map(function(it){var q=CART[it.k]?CART[it.k].q:0;
-    var ps=it.p||[];var ph=ps.length?'<button type="button" class="ph" data-ph="'+esc(it.k)+'" aria-label="Voir la fiche"><img loading="lazy" alt="'+esc(it.d)+'" src="'+img(ps[0])+'" data-alt="'+img2(ps[0])+'">'+(ps.length>1?'<span class="n">1 / '+ps.length+'</span>':'')+'</button>':'<button type="button" class="ph noph" data-ph="'+esc(it.k)+'" style="background:'+col(it.r||it.c||it.m)+'"><span class="e">'+ico(it.r,46)+'</span>'+esc(it.m||it.r||"")+'</button>';
-    return '<div class="card">'+ph+'<div><div class="nm">'+esc(it.d)+'</div><div class="br">'+esc([it.m,it.r].filter(Boolean).join(" · "))+'</div>'+(it.t?'<button type="button" class="more" data-ph="'+esc(it.k)+'">ℹ Voir la description</button>':'')+'</div>'
+  $("grid").innerHTML=ls.length?ls.slice(0,300).map(function(g){var it=cur(g);var q=CART[it.k]?CART[it.k].q:0;
+    var ps=photos(it);var ph=ps.length?'<button type="button" class="ph" data-ph="'+esc(it.k)+'" aria-label="Voir la fiche"><img loading="lazy" alt="'+esc(it.d)+'" src="'+img(ps[0])+'" data-alt="'+img2(ps[0])+'">'+(ps.length>1?'<span class="n">1 / '+ps.length+'</span>':'')+'</button>':'<button type="button" class="ph noph" data-ph="'+esc(it.k)+'" style="background:'+col(it.r||it.c||it.m)+'"><span class="e">'+ico(it.r,46)+'</span>'+esc(it.m||it.r||"")+'</button>';
+    return '<div class="card">'+ph+'<div><div class="nm">'+esc(g.title)+'</div><div class="br">'+esc([it.m,it.r].filter(Boolean).join(" · "))+'</div>'+(it.t?'<button type="button" class="more" data-ph="'+esc(it.k)+'">ℹ Voir la description</button>':'')+opts(g,it)+'</div>'
      +'<span class="badge '+badge(it)+'</span>'
      +(q?'<div class="step"><button type="button" data-m="'+esc(it.k)+'" aria-label="Moins">−</button><span>'+q+'</span><button type="button" data-p="'+esc(it.k)+'" aria-label="Plus">+</button></div>':'<button class="add" type="button" data-p="'+esc(it.k)+'">+ Ajouter à ma demande</button>')+'</div>';}).join(""):'<div class="empty">Aucun article ne correspond. Demande-nous sur WhatsApp, on peut souvent le commander !</div>';
   bar();}
 var LB={it:null,i:0};
-function lbShow(){var it=LB.it,ps=it.p||[];var im=$("lbi");var f=$("lbf");var np=f.querySelector(".noph");if(np)np.remove();
+function lbShow(){var it=LB.it,ps=photos(it);if(LB.i>=ps.length)LB.i=0;var im=$("lbi");var f=$("lbf");var np=f.querySelector(".noph");if(np)np.remove();
   if(ps.length){im.style.display="";im.onerror=function(){if(im.src!==img2(ps[LB.i]))im.src=img2(ps[LB.i]);};im.src=img(ps[LB.i]);im.alt=it.d;}else{im.style.display="none";f.insertAdjacentHTML("beforeend",'<div class="ph noph" style="background:'+col(it.r||it.c||it.m)+'"><span class="e">'+ico(it.r,46)+'</span>'+esc(it.m||it.r||"")+'</div>');}
   $("lbp").style.display=$("lbn").style.display=ps.length>1?"":"none";$("lbk").style.display=ps.length>1?"":"none";$("lbk").textContent=(LB.i+1)+" / "+ps.length;
   var q=CART[it.k]?CART[it.k].q:0;
-  $("lbb").innerHTML='<h2>'+esc(it.d)+'</h2><div class="br">'+esc([it.m,it.r].filter(Boolean).join(" · "))+'</div><span class="badge '+badge(it)+'</span>'+(it.t?'<div class="desc">'+esc(it.t)+'</div>':'')+(q?'<div class="step"><button type="button" data-m="'+esc(it.k)+'" aria-label="Moins">−</button><span>'+q+'</span><button type="button" data-p="'+esc(it.k)+'" aria-label="Plus">+</button></div>':'<button class="add" type="button" data-p="'+esc(it.k)+'">+ Ajouter à ma demande</button>');
+  $("lbb").innerHTML='<h2>'+esc(it._g?it._g.title:it.d)+'</h2><div class="br">'+esc([it.m,it.r].filter(Boolean).join(" · "))+'</div>'+(it._g?opts(it._g,it):'')+'<span class="badge '+badge(it)+'</span>'+(it.t?'<div class="desc">'+esc(it.t)+'</div>':'')+(q?'<div class="step"><button type="button" data-m="'+esc(it.k)+'" aria-label="Moins">−</button><span>'+q+'</span><button type="button" data-p="'+esc(it.k)+'" aria-label="Plus">+</button></div>':'<button class="add" type="button" data-p="'+esc(it.k)+'">+ Ajouter à ma demande</button>');
   $("lb").style.display="flex";}
 document.addEventListener("error",function(e){var t=e.target;if(t&&t.tagName==="IMG"&&t.dataset&&t.dataset.alt&&t.src!==t.dataset.alt)t.src=t.dataset.alt;},true);
 function find(k){for(var i=0;i<ITEMS.length;i++)if(ITEMS[i].k===k)return ITEMS[i];return null;}
+var GROUPS=[], GBY={}, SEL={};
+var SZ=/^(\d{2,3}(\.\d)?|XXS|XS|S|M|L|XL|XXL|XXXL|SM|ML|LXL|S\/M|M\/L|T\d|\d{1,2}Y)$/i;
+function parse(k){var K=String(k).trim().toUpperCase(),size="",model,color="";var u=K.lastIndexOf("_");
+  if(u>0&&SZ.test(K.slice(u+1))){size=K.slice(u+1);K=K.slice(0,u);}
+  var seg=K.split("-").map(function(x){return x.trim();});
+  if(seg.length>1){var n=seg[0].length<3?2:1;model=seg.slice(0,n).join("-");color=seg.slice(n).join("-");}else model=K;
+  if(!color){var u2=model.lastIndexOf("_");if(u2>=3){color=model.slice(u2+1);model=model.slice(0,u2);}}
+  return {model:model,color:color,size:size};}
+function sizeLabel(s){if(/^\d{3}$/.test(s)&&s.slice(-1)==="5")return s.slice(0,2)+".5";return s;}
+function cleanName(d){return String(d||"").replace(/\s+-\s+\d{2}(\.\d)?(''|")?\s+-\s+/g," ").replace(/\s\d{2}(\.\d)?(''|")?(?=\s|$)/g," ").replace(/\s(SM|S|M|L|XL|XXL|S\/M)$/,"").replace(/\s+/g," ").trim();}
+function common(ws){if(!ws.length)return [];var p=ws[0].slice();for(var i=1;i<ws.length;i++){var j=0;while(j<p.length&&j<ws[i].length&&p[j]===ws[i][j])j++;p=p.slice(0,j);}return p;}
+function group(){GBY={};GROUPS=[];ITEMS.forEach(function(it){var p=parse(it.k);it._p=p;var key=(it.m||"")+"|"+p.model;var g=GBY[key];if(!g){g=GBY[key]={key:key,vars:[]};GROUPS.push(g);}g.vars.push(it);});
+  GROUPS.forEach(function(g){var names=g.vars.map(function(v){return cleanName(v.d).split(" ");});var cp=common(names);
+    if(g.vars.length>1&&cp.length<2){g.vars.forEach(function(v){var k2=(v.m||"")+"|"+v.k;GBY[k2]={key:k2,vars:[v],solo:1};});g.split=1;return;}
+    g.title=g.vars.length>1?cp.join(" ").replace(/[\s\/-]+$/,""):g.vars[0].d;
+    g.vars.forEach(function(v){var w=cleanName(v.d).split(" ");v._cl=g.vars.length>1?w.slice(cp.length).join(" ").replace(/^[\s\/-]+/,""):"";});
+    var cs=[],seen={};g.vars.forEach(function(v){var c=v._p.color+"#"+v._cl;if(!seen[c]){seen[c]=1;cs.push({c:c,l:v._cl||v._p.color});}v._cc=c;});g.colors=cs.length>1?cs:[];
+    g.r=g.vars[0].r;g.m=g.vars[0].m;});
+  GROUPS=GROUPS.filter(function(g){return !g.split;}).concat(Object.keys(GBY).map(function(k){return GBY[k];}).filter(function(g){return g.solo;}).map(function(g){var v=g.vars[0];g.title=v.d;g.colors=[];g.r=v.r;g.m=v.m;v._cc="";return g;}));
+  GROUPS.forEach(function(g){g.vars.sort(function(a,b){var x=parseFloat(sizeLabel(a._p.size))||0,y=parseFloat(sizeLabel(b._p.size))||0;return x-y||String(a._p.size).localeCompare(String(b._p.size));});g.vars.forEach(function(v){v._g=g;});});}
+function rank(v){return (v.a==="dispo"?0:v.a==="commande"?2:1)*10+((v.p||[]).length?0:1);}
+function cur(g){var k=SEL[g.key];var v=k&&find(k);if(v&&v._g===g&&(!ONLY||v.a==="dispo"))return v;var best=null;g.vars.forEach(function(x){if(ONLY&&x.a!=="dispo")return;if(!best||rank(x)<rank(best))best=x;});return best||g.vars[0];}
+function photos(v){if((v.p||[]).length)return v.p;var g=v._g;if(!g)return [];for(var i=0;i<g.vars.length;i++){var x=g.vars[i];if(x._cc===v._cc&&(x.p||[]).length)return x.p;}return [];}
+function opts(g,v){var h="";if(g.colors.length){h+='<div class="ol">Coloris</div><div class="opts">'+g.colors.map(function(c){var on=c.c===v._cc;return '<button type="button" class="opt" data-gk="'+esc(g.key)+'" data-cc="'+esc(c.c)+'" aria-pressed="'+on+'">'+esc(c.l)+'</button>';}).join("")+'</div>';}
+  var ss=g.vars.filter(function(x){return x._cc===v._cc&&x._p.size;});
+  if(ss.length>1||(ss.length===1&&g.vars.length>1)){h+='<div class="ol">Taille</div><div class="opts">'+ss.map(function(x){var on=x===v;return '<button type="button" class="opt'+(x.a==="dispo"?"":" soon")+'" data-vk="'+esc(x.k)+'" aria-pressed="'+on+'" title="'+(x.a==="dispo"?"Disponible au Maroc":x.a==="commande"?"Sur commande":"Bientôt disponible")+'">'+esc(sizeLabel(x._p.size))+'</button>';}).join("")+'</div>';}
+  return h;}
 document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("button");if(!b)return;
+  if(b.dataset.vk){var v=find(b.dataset.vk);if(v&&v._g){SEL[v._g.key]=v.k;draw();if($("lb").style.display==="flex"&&LB.it&&LB.it._g===v._g){LB.it=v;LB.i=0;lbShow();}}return;}
+  if(b.dataset.gk!==undefined&&b.dataset.cc!==undefined){var g=GBY[b.dataset.gk];if(g){var c0=cur(g),best=null;g.vars.forEach(function(x){if(x._cc!==b.dataset.cc)return;if(c0&&x._p.size===c0._p.size){best=x;return;}if(!best||(best._p.size!==(c0&&c0._p.size)&&rank(x)<rank(best)))best=x;});if(best){SEL[g.key]=best.k;draw();if($("lb").style.display==="flex"&&LB.it&&LB.it._g===g){LB.it=best;LB.i=0;lbShow();}}}return;}
   if(b.dataset.ph){LB.it=find(b.dataset.ph);LB.i=0;if(LB.it)lbShow();return;}
-  if(b.id==="lbx"){$("lb").style.display="none";return;} if(b.id==="lbp"||b.id==="lbn"){var L2=(LB.it.p||[]).length||1;LB.i=(LB.i+(b.id==="lbn"?1:L2-1))%L2;lbShow();return;}
+  if(b.id==="lbx"){$("lb").style.display="none";return;} if(b.id==="lbp"||b.id==="lbn"){var L2=photos(LB.it).length||1;LB.i=(LB.i+(b.id==="lbn"?1:L2-1))%L2;lbShow();return;}
   if(b.dataset.p){var it=find(b.dataset.p)||CART[b.dataset.p];if(it){CART[b.dataset.p]={k:b.dataset.p,d:it.d,q:(CART[b.dataset.p]?CART[b.dataset.p].q:0)+1};saveCart();}draw();if($("sheet").style.display==="flex")sheet();if($("lb").style.display==="flex"&&LB.it)lbShow();return;}
   if(b.dataset.m){var c=CART[b.dataset.m];if(c){c.q--;if(c.q<=0)delete CART[b.dataset.m];saveCart();}draw();if($("sheet").style.display==="flex"){if(nInCart())sheet();else close();}if($("lb").style.display==="flex"&&LB.it)lbShow();return;}
   if(b.dataset.c!==undefined){CAT=b.dataset.c;ONLY=false;cats();draw();return;}
@@ -143,7 +173,7 @@ function send(b){var n=FORM.n.trim(),t=FORM.t.trim(),err=$("ferr");
   api("publicRequest",[{n:n,t:t,m:FORM.m,w:$("fw").value,lines:lines}]).then(function(r){var link=WA+"?text="+encodeURIComponent(wt+"\n(Demande "+(r&&r.num||"")+")");CART={};saveCart();draw();
       $("box").innerHTML='<div class="done"><div class="big">✅</div><h2>Demande envoyée !</h2><p>Merci '+esc(n)+'. On prépare ton devis personnalisé et on te recontacte très vite au '+esc(t)+'.</p><a class="wa" target="_blank" rel="noopener" href="'+link+'"><span class="dot" style="background:#fff"></span>Prévenir aussi sur WhatsApp</a><div class="btns"><button type="button" id="close">Fermer</button></div></div>';})
     .catch(function(e){b.disabled=false;b.textContent="Envoyer la demande";err.innerHTML=esc(String(e&&e.message||"Envoi impossible."))+' <a target="_blank" rel="noopener" href="'+WA+"?text="+encodeURIComponent(wt)+'">Envoie-la sur WhatsApp</a>';});}
-api("publicCatalogue",[]).then(function(r){ITEMS=(r&&r.items)||[];cats();draw();}).catch(function(){$("count").textContent="Catalogue indisponible pour le moment. Écris-nous sur WhatsApp !";});
+api("publicCatalogue",[]).then(function(r){ITEMS=(r&&r.items)||[];group();cats();draw();}).catch(function(){$("count").textContent="Catalogue indisponible pour le moment. Écris-nous sur WhatsApp !";});
 bar();
 })();
 </script></body></html>
