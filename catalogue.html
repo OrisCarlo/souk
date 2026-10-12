@@ -188,7 +188,9 @@ function send(b){var n=FORM.n.trim(),t=FORM.t.trim(),err=$("ferr");
   api("publicRequest",[{n:n,t:t,m:FORM.m,w:$("fw").value,lines:lines}]).then(function(r){var link=WA+"?text="+encodeURIComponent(wt+"\n(Demande "+(r&&r.num||"")+")");CART={};saveCart();draw();
       $("box").innerHTML='<div class="done"><div class="big">✅</div><h2>Demande envoyée !</h2><p>Merci '+esc(n)+'. On prépare ton devis personnalisé et on te recontacte très vite au '+esc(t)+'.</p><a class="wa" target="_blank" rel="noopener" href="'+link+'"><span class="dot" style="background:#fff"></span>Prévenir aussi sur WhatsApp</a><div class="btns"><button type="button" id="close">Fermer</button></div></div>';})
     .catch(function(e){b.disabled=false;b.textContent="Envoyer la demande";err.innerHTML=esc(String(e&&e.message||"Envoi impossible."))+' <a target="_blank" rel="noopener" href="'+WA+"?text="+encodeURIComponent(wt)+'">Envoie-la sur WhatsApp</a>';});}
-api("publicCatalogue",[]).then(function(r){ITEMS=(r&&r.items)||[];group();cats();draw();}).catch(function(){$("count").textContent="Catalogue indisponible pour le moment. Écris-nous sur WhatsApp !";});
+var PCK="souk_pc1",PCS="";function show(r){ITEMS=(r&&r.items)||[];group();cats();draw();}
+try{PCS=localStorage.getItem(PCK)||"";var pc=PCS?JSON.parse(PCS):null;if(pc&&pc.items&&pc.items.length)show(pc);else PCS="";}catch(e){PCS="";}
+api("publicCatalogue",[]).then(function(r){var j=JSON.stringify(r||{});if(j===PCS)return;try{localStorage.setItem(PCK,j);}catch(e){}show(r);}).catch(function(){if(!PCS)$("count").textContent="Catalogue indisponible pour le moment. Écris-nous sur WhatsApp !";});
 bar();
 })();
 </script></body></html>
