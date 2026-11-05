@@ -105,6 +105,10 @@ footer{text-align:center;color:var(--muted);font-size:12.5px;padding:20px 16px}
 .cat .cn{margin-top:8px;font-size:14px;white-space:nowrap}
 .cat[aria-pressed="true"] .ci{box-shadow:0 0 0 3px var(--teal),0 6px 18px rgba(15,95,110,.22)}
 @media (max-width:560px){.cat{width:84px}.cat .ci{width:72px;height:72px;border-radius:18px}.cat .cn{font-size:12.5px}}
+
+@media (max-width:700px){#cats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 8px;overflow:visible;padding:14px 0 6px}
+ .cat{width:auto;min-width:0;padding:0}.cat .ci{width:100%;max-width:92px;height:auto;aspect-ratio:1/1;border-radius:18px}
+ .cat .cn{white-space:normal;font-size:12.5px;margin-top:6px;overflow-wrap:anywhere}}
 </style></head><body>
 <header class="hero"><picture><source media="(max-width:700px)" srcset="hero-m.webp"><img class="hbg" src="hero.webp" alt="" fetchpriority="high"></picture><div class="hin">
 <img class="hlogo" src="logo-blanc.png" alt="Souk du Pirate" width="230" height="222">
