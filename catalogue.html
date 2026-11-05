@@ -59,11 +59,11 @@ label{display:block;font-weight:700;font-size:13px;margin-top:10px}label input,l
 footer{text-align:center;color:var(--muted);font-size:12.5px;padding:20px 16px}
 @media (max-width:560px){.card .lg{display:none}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.card{padding:7px}.nm{font-size:14px}.sw{width:26px;height:26px;min-width:26px}.opt{padding:4px 9px;font-size:12px;min-width:36px}.add{min-height:0;padding:9px 6px;font-size:14px}.badge{font-size:11px}}
 
-.hero{position:relative;overflow:hidden;min-height:400px;display:flex;align-items:flex-end;background:#0b2230;color:#fff;padding:0;border:0}
+.hero{position:relative;overflow:hidden;min-height:360px;display:flex;align-items:flex-end;background:#0b2230;color:#fff;padding:0;border:0}
 .hero .hbg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 45%}
 .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,18,28,.82) 0%,rgba(4,18,28,.55) 45%,rgba(4,18,28,.05) 80%),linear-gradient(0deg,rgba(4,18,28,.55),rgba(4,18,28,0) 55%)}
 .hin{position:relative;z-index:1;width:100%;max-width:1240px;margin:0 auto;padding:34px 16px 58px;display:flex;gap:36px;align-items:center}
-.hlogo{width:300px;height:auto;flex-shrink:0;filter:drop-shadow(0 2px 8px rgba(0,0,0,.4))}
+.hlogo{width:230px;height:auto;flex-shrink:0;filter:drop-shadow(0 2px 8px rgba(0,0,0,.4))}
 .htx{max-width:600px}.hk{margin:0;font-size:15px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#ffd08a}
 .hero h1{margin:2px 0 0;font-size:44px;line-height:1.05;letter-spacing:.03em;text-transform:uppercase;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.35)}
 .hcat{display:inline-block;margin:10px 0 0;padding:4px 14px;border:1.5px solid rgba(255,255,255,.75);border-radius:999px;font-size:13px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:#fff;background:rgba(255,255,255,.12)}
@@ -74,10 +74,10 @@ footer{text-align:center;color:var(--muted);font-size:12.5px;padding:20px 16px}
 #q{border:0;background:transparent;padding:17px 16px 17px 50px;font-size:17px;border-radius:16px;outline:none}#q::placeholder{color:var(--muted)}
 .sbox:focus-within{box-shadow:0 0 0 4px rgba(15,95,110,.18),0 8px 28px rgba(10,40,55,.18)}
 .tools{margin-top:4px}
-@media (max-width:700px){.hero{min-height:300px}.hin{flex-direction:column;align-items:flex-start;gap:10px;padding:26px 16px 52px}.hlogo{width:180px}.hero h1{font-size:31px}.hk{font-size:12.5px}.hsub{font-size:14px}.hero::after{background:linear-gradient(0deg,rgba(4,18,28,.85) 10%,rgba(4,18,28,.35) 70%,rgba(4,18,28,.2))}#q{font-size:16px;padding:15px 14px 15px 46px}}
+@media (max-width:700px){.hero{min-height:300px}.hin{flex-direction:column;align-items:flex-start;gap:10px;padding:26px 16px 52px}.hlogo{width:140px}.hero h1{font-size:31px}.hk{font-size:12.5px}.hsub{font-size:14px}.hero::after{background:linear-gradient(0deg,rgba(4,18,28,.85) 10%,rgba(4,18,28,.35) 70%,rgba(4,18,28,.2))}#q{font-size:16px;padding:15px 14px 15px 46px}}
 </style></head><body>
 <header class="hero"><picture><source media="(max-width:700px)" srcset="hero-m.webp"><img class="hbg" src="hero.webp" alt="" fetchpriority="high"></picture><div class="hin">
-<img class="hlogo" src="logo-blanc.png" alt="Souk du Pirate" width="300" height="290">
+<img class="hlogo" src="logo-blanc.png" alt="Souk du Pirate" width="230" height="222">
 <div class="htx"><p class="hk">Bienvenue chez</p><h1>Souk du Pirate</h1><p class="hcat">Catalogue</p>
 <p class="hsub">Surf, bodyboard et glisse au Maroc. Choisis tes articles, on te répond avec un devis personnalisé, gratuit et sans engagement.</p>
 <div class="contact"><a id="waTop" target="_blank" rel="noopener"><span class="dot"></span>WhatsApp</a><a id="mailTop">✉ soukdupirate@gmail.com</a></div></div></div></header>
@@ -151,7 +151,7 @@ function fMat(v){var a=" "+String(v.d).toUpperCase()+" ",b=" "+String(v.t||"").t
 function fEp(v){var d=String(v.d),m=d.match(/(\d(?:[.,]\d)?)\s*\/\s*(\d(?:[.,]\d)?)/);if(m)return [m[1]+"/"+m[2]+" mm"];m=d.match(/\b(\d)(\d)\s*MM\b/i);return m?[m[1]+"/"+m[2]+" mm"]:[];}
 function fLeash(v){var t=String(v.d).toUpperCase();return [/BICEP/.test(t)?"Biceps (bodyboard)":/WRIST|POIGNET/.test(t)?"Poignet (bodyboard)":/\bFINS?\b|PALME/.test(t)?"Palmes":"Cheville (surf)"];}
 function fAv(v){return [v.a==="epuise"?"Rupture de stock":"En stock"];}
-var FACETS={"":[["Catégorie",function(v){return v.r?[v.r]:[];}],["Marque",fBrand]],
+var FACETS={"":[["Marque",fBrand]],
  "Bodyboards":[["Taille",fSize],["Matériau",fMat],["Couleur",fCol],["Marque",fBrand]],
  "Palmes":[["Taille",fSize],["Couleur",fCol],["Marque",fBrand]],
  "Combinaisons":[["Taille",fSize],["Épaisseur",fEp],["Couleur",fCol],["Marque",fBrand]],
@@ -169,10 +169,13 @@ function renderF(){var B=base(),h="";facets().forEach(function(F){var n=F[0],fn=
     h+='<div class="fg"><h3>'+esc(n)+(Object.keys(sel).length?'<button type="button" class="fclr" data-fclr="'+esc(n)+'">Effacer</button>':'')+'</h3>'+vs.slice(0,lim).map(function(x){var on=!!sel[x];
       return '<label class="fv'+(cnt[x]||on?'':' z')+'"><input type="checkbox" data-fn="'+esc(n)+'" data-fv="'+esc(x)+'"'+(on?' checked':'')+'>'+(n==="Couleur"?'<span class="sq" style="background:'+FHEX[x]+'"></span>':'')+'<span>'+esc(x)+' <span class="c">('+(cnt[x]||0)+')</span></span></label>';}).join("")
       +(more>0?'<button type="button" class="fmore" data-fx="'+esc(n)+'">Afficher ('+more+') plus ⌄</button>':FX[n]&&vs.length>7?'<button type="button" class="fmore" data-fx="'+esc(n)+'">Afficher moins ⌃</button>':'')+'</div>';});
-  if(!h)h='<div class="fg" style="color:var(--muted);font-size:13px">Pas de filtre pour cette sélection.</div>';
+  var tq=strip($("q").value).split(/\s+/).filter(Boolean),cc={};GROUPS.forEach(function(g){var hs=strip(g.vars.map(function(it){return it.d+" "+it.m+" "+it.c+" "+(it.r||"")+" "+it.k;}).join(" "));for(var i=0;i<tq.length;i++)if(hs.indexOf(tq[i])<0)return;if(g.r)cc[g.r]=(cc[g.r]||0)+1;});
+  var ck=RUB.map(function(r){return r[0];}).filter(function(k){return cc[k];});Object.keys(cc).forEach(function(k){if(ck.indexOf(k)<0)ck.push(k);});
+  var hc='<div class="fg"><h3>Catégorie'+(CAT?'<button type="button" class="fclr" data-c="">Effacer</button>':'')+'</h3>'+ck.map(function(k){return '<label class="fv"><input type="checkbox" data-fcat="'+esc(k)+'"'+(CAT===k?' checked':'')+'><span>'+esc(k)+' <span class="c">('+cc[k]+')</span></span></label>';}).join("")+'</div>';
+  h=hc+h;
   $("side").innerHTML='<div class="fg"><h3>Filtres'+(nAct()?'<button type="button" class="fclr" data-fclr="*">Tout effacer</button>':'')+'</h3></div>'+h;$("fpan").innerHTML='<div class="fg"><h3>Filtres'+(nAct()?'<button type="button" class="fclr" data-fclr="*">Tout effacer</button>':'')+'</h3></div>'+h;
   var na=nAct();$("fbtn").textContent="Filtres"+(na?" · "+na:"");}
-document.addEventListener("change",function(e){var t=e.target;if(!t.dataset||t.dataset.fn===undefined)return;var n=t.dataset.fn,x=t.dataset.fv;FS[n]=FS[n]||{};if(t.checked)FS[n][x]=1;else delete FS[n][x];draw();});
+document.addEventListener("change",function(e){var t=e.target;if(t.dataset&&t.dataset.fcat!==undefined){CAT=t.checked?t.dataset.fcat:"";FS={};FX={};cats();draw();return;}if(!t.dataset||t.dataset.fn===undefined)return;var n=t.dataset.fn,x=t.dataset.fv;FS[n]=FS[n]||{};if(t.checked)FS[n][x]=1;else delete FS[n][x];draw();});
 function curF(g){var c=cur(g);if(!nAct()||vMatch(c,null))return c;var best=null;g.vars.forEach(function(x){if(!vMatch(x,null))return;if(!best||rank(x)<rank(best))best=x;});return best||c;}
 document.addEventListener("mouseover",function(e){if(!window.matchMedia||!matchMedia("(hover:hover)").matches)return;var p=e.target.closest&&e.target.closest(".ph");if(!p||p._hv)return;var im=p.querySelector("img[data-h]");if(!im)return;p._hv=1;var h=new Image();h.className="hv";h.alt="";h.onload=function(){h.classList.add("ok");};h.onerror=function(){if(h.src!==img2(im.dataset.h))h.src=img2(im.dataset.h);};h.src=img(im.dataset.h);im.parentNode.insertBefore(h,im.nextSibling);});
 var LB={it:null,i:0};
