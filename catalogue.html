@@ -100,6 +100,11 @@ footer{text-align:center;color:var(--muted);font-size:12.5px;padding:20px 16px}
 .cat[aria-pressed="true"] .ci img.cl{filter:invert(28%) sepia(60%) saturate(700%) hue-rotate(150deg)}
 @media (min-width:900px){#cats{justify-content:center}}
 @media (max-width:560px){.cat{width:86px}.cat .ci{width:66px;height:66px}.cat .cn{font-size:12.5px}.cat .cc{font-size:11px}.cat .cico{width:24px;height:24px}}
+
+.cat{width:112px;gap:0}.cat .ci{width:96px;height:96px;border-radius:22px;box-shadow:0 0 0 1px var(--line),0 4px 14px rgba(16,40,50,.08)}.cat .ci img{width:80%;height:80%}
+.cat .cn{margin-top:8px;font-size:14px;white-space:nowrap}
+.cat[aria-pressed="true"] .ci{box-shadow:0 0 0 3px var(--teal),0 6px 18px rgba(15,95,110,.22)}
+@media (max-width:560px){.cat{width:84px}.cat .ci{width:72px;height:72px;border-radius:18px}.cat .cn{font-size:12.5px}}
 </style></head><body>
 <header class="hero"><picture><source media="(max-width:700px)" srcset="hero-m.webp"><img class="hbg" src="hero.webp" alt="" fetchpriority="high"></picture><div class="hin">
 <img class="hlogo" src="logo-blanc.png" alt="Souk du Pirate" width="230" height="222">
@@ -154,8 +159,8 @@ function bar(){var n=nInCart();$("bar").style.display=n?"block":"none";$("open")
 function cats(){var cs={};GROUPS.forEach(function(g){if(g.r)cs[g.r]=(cs[g.r]||0)+1;});var ks=RUB.map(function(r){return r[0];}).filter(function(k){return cs[k];});Object.keys(cs).forEach(function(k){if(ks.indexOf(k)<0)ks.push(k);});
   if(CAT&&!cs[CAT])CAT="";
   var pic={};GROUPS.forEach(function(g){if(!g.r||pic[g.r])return;for(var i=0;i<g.vars.length;i++){var ps=photos(g.vars[i]);if(ps.length&&g.vars[i].a!=="epuise"){pic[g.r]=ps[0];break;}}});
-  var tile=function(k,lab,n,inner){return '<button class="cat" data-c="'+esc(k)+'" aria-pressed="'+(CAT===k)+'"><span class="ci">'+inner+'</span><span class="cn">'+esc(lab)+'</span><span class="cc">'+n+' article'+(n>1?'s':'')+'</span></button>';};
-  $("cats").innerHTML=tile("","Tout voir",GROUPS.length,'<img src="logo-blanc.png" alt="" class="cl">')+ks.map(function(k){return tile(k,k,cs[k],pic[k]?'<img src="'+img(pic[k],200)+'" alt="" loading="lazy" data-alt="'+img2(pic[k],200)+'"><span class="cico">'+ico(k,16)+'</span>':ico(k,30));}).join("");}
+  var tile=function(k,lab,n,inner){return '<button class="cat" data-c="'+esc(k)+'" aria-pressed="'+(CAT===k)+'"><span class="ci">'+inner+'</span><span class="cn">'+esc(lab)+'</span></button>';};
+  $("cats").innerHTML=ks.map(function(k){return tile(k,k,cs[k],pic[k]?'<img src="'+img(pic[k],200)+'" alt="" loading="lazy" data-alt="'+img2(pic[k],200)+'">':ico(k,30));}).join("");}
 function draw(){var fa=nAct();
   var ls=base().filter(function(g){return !fa||g.vars.some(function(v){return vMatch(v,null);});});
   var out=function(g){return g.vars.every(function(x){return x.a==="epuise";});};ls=ls.filter(function(g){return !out(g);}).concat(ls.filter(out));
@@ -279,7 +284,7 @@ document.addEventListener("click",function(e){var b=e.target.closest&&e.target.c
   if(b.id==="lbx"){lbClose();return;} if(b.id==="lbp"||b.id==="lbn"){var L2=photos(LB.it).length||1;LB.i=(LB.i+(b.id==="lbn"?1:L2-1))%L2;lbShow();return;}
   if(b.dataset.p){var it=find(b.dataset.p)||CART[b.dataset.p];if(it){CART[b.dataset.p]={k:b.dataset.p,d:it.d,q:(CART[b.dataset.p]?CART[b.dataset.p].q:0)+1};saveCart();}draw();if($("sheet").style.display==="flex")sheet();if($("lb").style.display==="flex"&&LB.it)lbShow();return;}
   if(b.dataset.m){var c=CART[b.dataset.m];if(c){c.q--;if(c.q<=0)delete CART[b.dataset.m];saveCart();}draw();if($("sheet").style.display==="flex"){if(nInCart())sheet();else close();}if($("lb").style.display==="flex"&&LB.it)lbShow();return;}
-  if(b.dataset.c!==undefined){CAT=b.dataset.c;ONLY=false;FS={};FX={};cats();draw();return;}
+  if(b.dataset.c!==undefined){CAT=(b.classList.contains("cat")&&CAT===b.dataset.c)?"":b.dataset.c;ONLY=false;FS={};FX={};cats();draw();return;}
   if(b.dataset.fclr!==undefined){if(b.dataset.fclr==="*")FS={};else delete FS[b.dataset.fclr];draw();return;}
   if(b.dataset.fx!==undefined){FX[b.dataset.fx]=!FX[b.dataset.fx];renderF();return;}
   if(b.id==="fbtn"){renderF();$("fsh").style.display="flex";return;} if(b.id==="fgo"){$("fsh").style.display="none";window.scrollTo(0,$("grid").offsetTop-60);return;}
